@@ -27,10 +27,9 @@ agNodo n (G ns r) = G (n:ns) r
 -- Ejercicio 5
 sacarNodo :: Eq a => a -> Grafo a -> Grafo a
 sacarNodo n (G ns r) = 
-	G (nodosSin ns n) (relacionesSin r n)
-	where 
-		nodosSin ns n = filter (\m -> not (m == n)) ns 
-		relacionesSin r n = \x -> if (x == n) then [] else (r n)
+	G (sacar n ns) (relacionesSin r n)
+	where
+		relacionesSin r n = \x -> if (x == n) then [] else (sacar n (r x))
 
 --PRE: n, m in nodos G
 -- Ejercicio 6
@@ -59,10 +58,10 @@ union (G ns1 r1) (G ns2 r2) = G (sinRepetidos (ns1++ns2)) (unionRel r1 r2)
 
 -- Ejercicio 9
 clausura :: Grafo a -> Grafo a
-clausura (G ns r) = G ns (relClaus ns r)
-	where 
-		relClaus ns r = \x -> completarRel (relAlcanzadasPor x ns r)
-		relAlcanzadasPor x ns r = []
+clausura = undefined
+
+sacar :: Eq a => a -> [a] -> [a]
+sacar n xs = [x | x <- xs, not (x == n)]
 
 sinRepetidos :: Eq a => [a] -> [a]
 sinRepetidos xs = [xs!!i | i <- [0..(length xs)-1], not (elem (xs!!i) (drop (i+1) xs))]
