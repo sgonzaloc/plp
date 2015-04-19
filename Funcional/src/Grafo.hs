@@ -34,11 +34,10 @@ sacarNodo n (G ns r) =
 --PRE: n, m in nodos G
 -- Ejercicio 6
 agEje :: Eq a => (a,a) -> Grafo a -> Grafo a
-agEje (n, m) (G ns r) = 
-	G ns (relacionesCon r (n, m))
+agEje (n, m) (G ns r) = G ns (relacionesCon r (n, m))
 	where relacionesCon r (n, m) = \x -> if (x == n) 
-		then m:(r n) 
-		else (r n)
+		then m:(r x) 
+		else (r x)
 
 -- Ejercicio 7
 lineal :: Eq a => [a] -> Grafo a
