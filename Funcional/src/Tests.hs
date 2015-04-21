@@ -24,9 +24,6 @@ testsParser = test [
   (B (And (Var "p") (Var "q")))   ~=? (parse "[](p && q)")
   ]
 
-
-
-
 testsGrafo = test [
   -- Test Nodos --
   -- [] ~~? (nodos vacio), -- No se puede testear por un problema de tipos
@@ -65,7 +62,7 @@ testsGrafo = test [
 
 
 testsLomoba = test [
-  -- Test Visibilidad --
+  -- Test visibilidad --
   0 ~=? visibilidad (parse "p"),
   1 ~=? visibilidad (parse "<>p"),
   2 ~=? visibilidad (parse "<>!<>p"),
@@ -73,10 +70,22 @@ testsLomoba = test [
   3 ~=? visibilidad (parse "<>(<>p || <><>q)"),
   3 ~=? visibilidad (parse "[](<>p || <>[]q)"),
 
-  -- Test Extraer --
+  -- Test extraer --
   ["p"]      ~~? extraer (parse "p"),
   ["p"]      ~~? extraer (parse "p || !p"),
   ["p", "q"] ~~? extraer (parse "p && q")
+
+  -- Test eval --
+  
+--data Modelo = K (Grafo Mundo) (Prop -> [Mundo])
+
+  -- Test valeEn --
+  [] ~~? (valeEn (parse "p") (K vacio (\_ -> []))
+  [1] ~~? (valeEn (parse "p && q") (K (lineal [1]) (\_ -> [1]))
+
+  -- Test quitar --
+
+  -- Test cierto --
 
   ]
 
