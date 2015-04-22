@@ -91,8 +91,13 @@ testsLomoba = test [
   ["p", "q"] ~~? extraer (parse "p && q"),
 
   -- Test eval --
-  
---data Modelo = K (Grafo Mundo) (Prop -> [Mundo])
+  False ~=? eval (K vacio (\_ -> [])) 1 (parse "p"),
+  True ~=? eval (K (lineal [1]) (\_ -> [1])) 1 (parse "p"),
+  False ~=? eval (K (lineal [1..4]) (\_ -> [1,3]) ) 1 (parse "p && !q"),
+  False ~=? eval (K (lineal [1..4]) (\_ -> [1,3]) ) 2 (parse "p && q"),
+  True ~=? eval (K (clausura (lineal [1..4])) (\_ -> [1,3]) ) 1 (parse "<>p"),
+  False ~=? eval (K (clausura (lineal [1..4])) (\_ -> [1,3]) ) 2 (parse "[]p"),
+
 
   -- Test valeEn --
   [] ~~? (valeEn (parse "p") (K vacio (\_ -> []))),
