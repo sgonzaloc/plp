@@ -50,11 +50,12 @@ union (G ns1 r1) (G ns2 r2) = G (List.nub (ns1 ++ ns2)) (unionRel r1 r2)
   where unionRel r1 r2 = \x -> List.nub ((r1 x) ++ (r2 x))
 
 -- Ejercicio 9
-clausura :: Grafo a -> Grafo a
-clausura = undefined
+clausura :: Eq a => Grafo a -> Grafo a
+clausura (G ns fv) = G ns (\n -> (vecinosClausura fv) [n])
 
-
-
+vecinosClausura :: Eq a => (a -> [a]) -> ([a] -> [a])
+vecinosClausura fvs = puntofijo vecinosDeLista
+  where vecinosDeLista = (\x -> List.nub (concat (x:(map fvs x))))
 
 ---- PRIVATE FUNCTIONS ----
 
@@ -62,3 +63,7 @@ clausura = undefined
 add_if_not_present :: Eq a => a -> [a] -> [a]
 add_if_not_present n ns | n `elem` ns = ns
                         | otherwise   = n:ns
+
+-- Genera la funcion que devuelve el punto fijo para cualquier valor de entrada
+puntofijo :: Eq a => (a -> a) -> (a -> a)
+puntofijo f = (\x -> if x == (f x) then x else ((puntofijo f) (f x)))
