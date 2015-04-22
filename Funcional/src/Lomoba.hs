@@ -27,19 +27,19 @@ extraer exp = List.nub $ foldExp (\p -> [p]) id join_props join_props id id exp
   where join_props = \e1 e2 -> e1 ++ e2
 
 -- Ejercicio 13
--- Falta el caso q el mundo no pertenece al modelo
 eval :: Modelo -> Mundo -> Exp -> Bool
-eval (K g f) w = foldExp
-  (\p -> elem w (f p))
-  (not)
-  (||)
-  (&&)
-  (\exp -> any (eval' (K g f) exp) (vecinos g w) )
-  (\exp -> all (eval' (K g f) exp) (vecinos g w) )
+eval (K g f) w e | elem w (nodos g) = eval' (K g f) e w
+                 | otherwise = False
 
+eval' :: Modelo -> Exp -> (Mundo -> Bool)
+eval' (K g f) = foldExp
+  (\p -> (\w -> elem w (f p))) -- Var
+  (\wb -> (\w -> not (wb w))) -- Not
+  (\wb1 wb2 -> (\w -> (wb1 w) || (wb2 w) )) -- Or
+  (\wb1 wb2 -> (\w -> (wb1 w) && (wb2 w) )) -- And
+  (\wb -> (\w -> any wb (vecinos g w) )) -- Diamond
+  (\wb -> (\w -> all wb (vecinos g w) )) -- Box
 
-eval' :: Modelo -> Exp -> Mundo -> Bool
-eval' m e = flip (eval m) e
 
 -- Ejercicio 14
 valeEn :: Exp -> Modelo -> [Mundo]
