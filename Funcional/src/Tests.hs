@@ -92,20 +92,24 @@ testsLomoba = test [
 
   -- Test eval --
   False ~=? eval (K vacio (\_ -> [])) 1 (parse "p"),
-  True ~=? eval (K (lineal [1]) (\_ -> [1])) 1 (parse "p"),
+  True  ~=? eval (K (lineal [1]) (\_ -> [1])) 1 (parse "p"),
   False ~=? eval (K (lineal [1..4]) (\_ -> [1,3]) ) 1 (parse "p && !q"),
   False ~=? eval (K (lineal [1..4]) (\_ -> [1,3]) ) 2 (parse "p && q"),
-  True ~=? eval (K (clausura (lineal [1..4])) (\_ -> [1,3]) ) 1 (parse "<>p"),
+  True  ~=? eval (K (clausura (lineal [1..4])) (\_ -> [1,3]) ) 1 (parse "<>p"),
   False ~=? eval (K (clausura (lineal [1..4])) (\_ -> [1,3]) ) 2 (parse "[]p"),
 
 
   -- Test valeEn --
-  [] ~~? (valeEn (parse "p") (K vacio (\_ -> []))),
-  [1] ~~? (valeEn (parse "p && q") (K (lineal [1]) (\_ -> [1])))
+  []  ~~? (valeEn (parse "p") (K vacio (\_ -> []))),
+  [1] ~~? (valeEn (parse "p && q") (K (lineal [1]) (\_ -> [1]))),
 
   -- Test quitar --
 
   -- Test cierto --
+  True  ~=? cierto (K (clausura (lineal [1..4])) (\_ -> [1..4]) ) (parse "p"),
+  True  ~=? cierto (K (clausura (lineal [1..4])) (\_ -> []) )     (parse "!p"),
+  False ~=? cierto (K (clausura (lineal [1..4])) (\_ -> [1,3]) )  (parse "<>p"),
+  False ~=? cierto (K (clausura (lineal [1..4])) (\_ -> [1,3]) )  (parse "[]p")
 
   ]
 
