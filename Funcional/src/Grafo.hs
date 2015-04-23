@@ -36,7 +36,7 @@ agEje (s, d) grafo@(G ns f) | valid_nodes = G ns new_f
                             | otherwise = grafo
     where
       valid_nodes = elem s ns && elem d ns
-      new_f = (\x -> if x == s then add_if_not_present d (f x) else (f x))
+      new_f = \x -> if x == s then add_if_not_present d (f x) else (f x)
 
 -- Ejercicio 7
 lineal :: Eq a => [a] -> Grafo a
@@ -51,11 +51,10 @@ union (G ns1 r1) (G ns2 r2) = G (List.nub (ns1 ++ ns2)) (unionRel r1 r2)
 
 -- Ejercicio 9
 clausura :: Eq a => Grafo a -> Grafo a
-clausura (G ns fv) = G ns (\n -> (vecinosClausura fv) [n])
-
-vecinosClausura :: Eq a => (a -> [a]) -> ([a] -> [a])
-vecinosClausura fvs = puntofijo vecinosDeLista
-  where vecinosDeLista = (\x -> List.nub (concat (x:(map fvs x))))
+clausura (G ns fv) = G ns (\n -> vecinosClausura n)
+  where
+    vecinosClausura n = puntofijo vecinosDeLista [n]
+    vecinosDeLista  = \xs -> List.nub (concat (xs:(map fv xs)))
 
 ---- PRIVATE FUNCTIONS ----
 

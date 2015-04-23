@@ -40,9 +40,9 @@ testsGrafo = test [
   [1,2] ~~? (nodos (agNodo 2 (agNodo 1 vacio))),
 
   -- Test Vecinos --
-  [] ~~? (vecinos (agNodo 1 vacio) 1),
-  [] ~~? (vecinos (agEje (2,1) (agNodo 1 vacio)) 1),
-  [] ~~? (vecinos (agEje (1,1) (agNodo 1 vacio)) 2),
+  []  ~~? (vecinos (agNodo 1 vacio) 1),
+  []  ~~? (vecinos (agEje (2,1) (agNodo 1 vacio)) 1),
+  []  ~~? (vecinos (agEje (1,1) (agNodo 1 vacio)) 2),
   [1] ~~? (vecinos (agEje (1,1) (agNodo 1 vacio)) 1),
 
   -- Test sacarNodo --
@@ -58,9 +58,9 @@ testsGrafo = test [
   []     ~~? (vecinos g_lineal 4),
 
   -- Test union --
-  [1]     ~~? (nodos (union vacio (lineal [1]))),
-  [1,2]   ~~? (nodos (union (lineal [2]) (lineal [1]))),
-  [1..10] ~~? (nodos (union (lineal [5..10]) (lineal [1..5]))),
+  [1]     ~~? (nodos   (union vacio (lineal [1]))),
+  [1,2]   ~~? (nodos   (union (lineal [2]) (lineal [1]))),
+  [1..10] ~~? (nodos   (union (lineal [5..10]) (lineal [1..5]))),
   []      ~~? (vecinos (union vacio (lineal [1])) 1),
   []      ~~? (vecinos (union (lineal [2]) (lineal [1])) 1),
   [6]     ~~? (vecinos (union (lineal [5..10]) (lineal [1..5])) 5),
