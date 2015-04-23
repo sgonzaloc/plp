@@ -47,7 +47,11 @@ valeEn e (K g f) = [w | w <- (nodos g), eval (K g f) w e]
 
 -- Ejercicio 15
 quitar :: Exp -> Modelo -> Modelo
-quitar exp (K grafo f)= undefined
+quitar exp m@(K grafo fv) = K clean_graph clean_f
+  where
+    clean_graph = head (scanr (\w g -> sacarNodo w g) grafo worlds_to_remove)
+    clean_f = head (scanr (\w f -> (\prop -> List.delete w (f prop))) fv worlds_to_remove)
+    worlds_to_remove = [w | w <- (nodos grafo), notElem w (valeEn exp m)]
 
 -- Ejercicio 16
 cierto :: Modelo -> Exp -> Bool
