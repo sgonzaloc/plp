@@ -28,7 +28,7 @@ extraer exp = List.nub $ foldExp (\p -> [p]) id join_props join_props id id exp
 
 -- Ejercicio 13
 eval :: Modelo -> Mundo -> Exp -> Bool
-eval (K g f) w e | elem w (nodos g) = eval' (K g f) e w
+eval m@(K g f) w e | elem w (nodos g) = eval' m e w
                  | otherwise = False
 
 eval' :: Modelo -> Exp -> (Mundo -> Bool)
@@ -43,7 +43,7 @@ eval' (K g f) = foldExp
 
 -- Ejercicio 14
 valeEn :: Exp -> Modelo -> [Mundo]
-valeEn e (K g f) = [w | w <- (nodos g), eval (K g f) w e]
+valeEn e m@(K g f) = [w | w <- (nodos g), eval m w e]
 
 -- Ejercicio 15
 quitar :: Exp -> Modelo -> Modelo
@@ -55,6 +55,5 @@ quitar exp m@(K grafo fv) = K clean_graph clean_f
 
 -- Ejercicio 16
 cierto :: Modelo -> Exp -> Bool
-cierto (K grafo f) exp = all (\w -> eval model w exp) (nodos grafo)
-  where model = K grafo f
+cierto m@(K grafo f) exp = all (\w -> eval m w exp) (nodos grafo)
 

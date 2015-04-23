@@ -32,8 +32,8 @@ sacarNodo node (G ns f) = G  (rm_n ns) (\n -> if n == node then [] else rm_n (f 
 
 -- Ejercicio 6
 agEje :: Eq a => (a,a) -> Grafo a -> Grafo a
-agEje (s, d) (G ns f) | valid_nodes = G ns new_f
-                      | otherwise = G ns f
+agEje (s, d) grafo@(G ns f) | valid_nodes = G ns new_f
+                            | otherwise = grafo
     where
       valid_nodes = elem s ns && elem d ns
       new_f = (\x -> if x == s then add_if_not_present d (f x) else (f x))
