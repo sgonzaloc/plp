@@ -65,5 +65,8 @@ add_if_not_present n ns | n `elem` ns = ns
                         | otherwise   = n:ns
 
 -- Genera la funcion que devuelve el punto fijo para cualquier valor de entrada
-puntofijo :: Eq a => (a -> a) -> (a -> a)
-puntofijo f = (\x -> if x == (f x) then x else ((puntofijo f) (f x)))
+puntofijo :: Eq a => (a -> a) -> a -> a
+puntofijo f x = head [ iterative_call n | n <- [1..], stop_condition n]
+  where
+    iterative_call n = last (take n (iterate f x))
+    stop_condition n = (iterative_call n) == (iterative_call (n+1))
