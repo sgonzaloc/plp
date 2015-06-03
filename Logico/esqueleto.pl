@@ -17,20 +17,25 @@ tablero(libre20, T) :- tablero(20, 20, T).
 %% Ejercicio 1
 %% tablero(+Filas,+Columnas,-Tablero) instancia una estructura de tablero en blanco
 %% de Filas x Columnas, con todas las celdas libres.
-tablero(1, C, [L]) :- C > 0, length(L, C).
-tablero(F, C, [Unario | S]) :- F > 0, C > 0, tablero(1, C, Unario),
-  Anterior is F - 1, tablero(Anterior, C, S).
+tablero(1,C,[L]) :- C > 0, length(L, C).
+tablero(F,C,T) :- F > 0, tablero(1, C, Unario), Anterior is F - 1,
+                  tablero(Anterior, C, S), append(S, Unario, T).
+
+% TODO: Si saco el append y lo mando a la definicion,
+% se cuelga cuando uso ocupar
+
 
 %% Ejercicio 2
 %% ocupar(+Pos,?Tablero) será verdadero cuando la posición indicada esté ocupada.
-ocupar(pos(X, Y), T) :- nonvar(T), nth0(X, T, L), nth0(Y, L, ocupada).
+ocupar(pos(X, Y), T) :- nth0(X, T, L), nth0(Y, L, ocupada).
 
+% TODO: Esto no es necesario hacerlo, pues no tenemos que dimensionar todos los tableros
 
-ocupar(pos(X, Y), tablero(Q, W, E)) :- var(tablero(Q, W, E)), desde(2, Limite),
-  CotaF is Limite - 1, between(1, CotaF, F),
-  F > X, C is Limite - F, C > Y,
-  tablero(F, C, T),
-  ocupar(pos(X, Y), T).
+%ocupar(pos(X, Y), tablero(Q, W, E)) :- var(tablero(Q, W, E)), desde(2, Limite),
+%  CotaF is Limite - 1, between(1, CotaF, F),
+%  F > X, C is Limite - F, C > Y,
+%  tablero(F, C, T),
+%  ocupar(pos(X, Y), T).
 
 
 
