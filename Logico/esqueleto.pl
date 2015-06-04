@@ -100,7 +100,9 @@ camino(I,F,T, [I | Path], Used) :-
 %% Ejercicio 6
 %% cantidadDeCaminos(+Inicio, +Fin, +Tablero, ?N) que indique la cantidad de caminos
 %% posibles sin ciclos entre Inicio y Fin.
-cantidadDeCaminos(_,_,_,_).
+cantidadDeCaminos(I,F,T,N) :-
+  findall(P, camino(I,F,T,P), L),
+  length(L, N).
 
 %% Ejercicio 7
 %% camino2(+Inicio, +Fin, +Tablero, -Camino) ídem camino/4 pero se espera una heurística
