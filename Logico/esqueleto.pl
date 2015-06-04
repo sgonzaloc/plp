@@ -33,7 +33,7 @@ tablero(F,C,T) :- F > 0, tablero(1, C, Unario), Anterior is F - 1,
 
 %% Ejercicio 2
 %% ocupar(+Pos,?Tablero) será verdadero cuando la posición indicada esté ocupada.
-ocupar(pos(X, Y), T) :- nth0(X, T, L), nth0(Y, L, ocupada).
+ocupar(P, T) :- getPos(P, T, ocupada).
 
 % TODO: Esto no es necesario hacerlo, pues no tenemos que dimensionar todos los tableros
 
