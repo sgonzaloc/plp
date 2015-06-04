@@ -4,17 +4,24 @@ desde(X, Y) :- nonvar(Y), Y > X.
 desde(X, Y) :- var(Y), N is X + 1, desde(N, Y).
 
 tablero(ej5x5, T) :-
-      tablero(5, 5, T),
-      ocupar(pos(1, 1), T),
-      ocupar(pos(1, 2), T).
+  tablero(5, 5, T),
+  ocupar(pos(1, 1), T),
+  ocupar(pos(1, 2), T).
 
 tablero(libre20, T) :- tablero(20, 20, T).
 
-posValida(pos(X,Y), T) :- length(T, F), nth0(0, T, L), length(L, C),
-                          between(1, F, R), between(1, C, K),
-                          X is R - 1, Y is K - 1.
+posValida(pos(X,Y), T) :-
+  length(T, F), nth0(0, T, L), length(L, C),
+  between(1, F, R), between(1, C, K),
+  X is R - 1, Y is K - 1.
 
-getPos(pos(X, Y), T, P) :- posValida(pos(X, Y), T), nth0(X, T, L), nth0(Y, L, P), !.
+getPos(pos(X, Y), T, P) :-
+  posValida(pos(X, Y), T), nth0(X, T, L), nth0(Y, L, P), !.
+
+
+
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%
 %% Tablero
@@ -24,8 +31,9 @@ getPos(pos(X, Y), T, P) :- posValida(pos(X, Y), T), nth0(X, T, L), nth0(Y, L, P)
 %% tablero(+Filas,+Columnas,-Tablero) instancia una estructura de tablero en blanco
 %% de Filas x Columnas, con todas las celdas libres.
 tablero(1,C,[L]) :- C > 0, length(L, C).
-tablero(F,C,T) :- F > 0, tablero(1, C, Unario), Anterior is F - 1,
-                  tablero(Anterior, C, S), append(S, Unario, T).
+tablero(F,C,T) :-
+  F > 0, tablero(1, C, Unario), Anterior is F - 1,
+  tablero(Anterior, C, S), append(S, Unario, T).
 
 % TODO: Si saco el append y lo mando a la definicion,
 % se cuelga cuando uso ocupar
