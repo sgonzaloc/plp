@@ -10,6 +10,12 @@ tablero(ej5x5, T) :-
 
 tablero(libre20, T) :- tablero(20, 20, T).
 
+posValida(pos(X,Y), T) :- length(T, F), nth0(0, T, L), length(L, C),
+                          between(1, F, R), between(1, C, K),
+                          X is R - 1, Y is K - 1.
+
+getPos(pos(X, Y), T, P) :- posValida(pos(X, Y), T), nth0(X, T, L), nth0(Y, L, P), !.
+
 %%%%%%%%%%%%%%%%%%%%%%%%
 %% Tablero
 %%%%%%%%%%%%%%%%%%%%%%%%
