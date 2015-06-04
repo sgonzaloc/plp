@@ -50,12 +50,16 @@ ocupar(P, T) :- getPos(P, T, ocupada).
 %% un átomo de la forma pos(F', C') y pos(F',C') sea una celda contigua a
 %% pos(F,C), donde Pos=pos(F,C). Las celdas contiguas puede ser a lo sumo cuatro
 %% dado que el robot se moverá en forma ortogonal.
-vecino(_,_,_).
+
+vecino(pos(F, C), T, pos(X, C)) :- X is F - 1, posValida(pos(X, C), T).
+vecino(pos(F, C), T, pos(X, C)) :- X is F + 1, posValida(pos(X, C), T).
+vecino(pos(F, C), T, pos(F, Y)) :- Y is C - 1, posValida(pos(F, Y), T).
+vecino(pos(F, C), T, pos(F, Y)) :- Y is C + 1, posValida(pos(F, Y), T).
 
 %% Ejercicio 4
 %% vecinoLibre(+Pos, +Tablero, -PosVecino) idem vecino/3 pero además PosVecino
 %% debe ser una celda transitable (no ocupada) en el Tablero
-vecinoLibre(_,_,_).
+vecinoLibre(P,T,Q) :- vecino(P, T, Q), getPos(Q, T, Z), var(Z).
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%
