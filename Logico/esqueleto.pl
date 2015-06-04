@@ -18,6 +18,10 @@ posValida(pos(X,Y), T) :-
 getPos(pos(X, Y), T, P) :-
   posValida(pos(X, Y), T), nth0(X, T, L), nth0(Y, L, P), !.
 
+nonmember(Arg,[Arg|_]) :- !, fail.
+nonmember(Arg,[_|Tail]) :- !, nonmember(Arg,Tail).
+nonmember(_,[]).
+
 
 
 
