@@ -86,7 +86,16 @@ vecinoLibre(P,T,Q) :- vecino(P, T, Q), getPos(Q, T, Z), var(Z).
 %% Notar que la cantidad de caminos es finita y por ende se tiene que poder recorrer
 %% todas las alternativas eventualmente.
 %% Consejo: Utilizar una lista auxiliar con las posiciones visitadas
-camino(_,_,_,_).
+% camino(I,F,T,P) :- nth0(0, P, I), last(P, F).
+camino(I,F,T,P) :- camino(I, F, T, P, [I]).
+
+camino(F,F,_T, [F], _Used).
+camino(I,F,T, [I | Path], Used) :-
+  vecinoLibre(I, T, Vecino),
+  nonmember(Vecino, Used),
+  camino(Vecino, F, T, Path, [Vecino | Used]).
+
+
 
 %% Ejercicio 6
 %% cantidadDeCaminos(+Inicio, +Fin, +Tablero, ?N) que indique la cantidad de caminos
