@@ -36,7 +36,7 @@ nonmember(_,[]).
 %% de Filas x Columnas, con todas las celdas libres.
 tablero(1,C,[L]) :- C > 0, length(L, C).
 tablero(F,C,T) :-
-  F > 0, tablero(1, C, Unario), Anterior is F - 1,
+  F > 1, tablero(1, C, Unario), Anterior is F - 1,
   tablero(Anterior, C, S), append(S, Unario, T).
 
 % TODO: Si saco el append y lo mando a la definicion,
@@ -57,7 +57,7 @@ ocupar(P, T) :- getPos(P, T, ocupada).
 
 
 
-%% Ejercicio 3
+%% Ejercicio 3/home/kano/Documentos/facu/materias/plp/laboratorio/tps/Logico/
 %% vecino(+Pos, +Tablero, -PosVecino) será verdadero cuando PosVecino sea
 %% un átomo de la forma pos(F', C') y pos(F',C') sea una celda contigua a
 %% pos(F,C), donde Pos=pos(F,C). Las celdas contiguas puede ser a lo sumo cuatro
@@ -72,6 +72,22 @@ vecino(pos(F, C), T, pos(F, Y)) :- Y is C + 1, posValida(pos(F, Y), T).
 %% vecinoLibre(+Pos, +Tablero, -PosVecino) idem vecino/3 pero además PosVecino
 %% debe ser una celda transitable (no ocupada) en el Tablero
 vecinoLibre(P,T,Q) :- vecino(P, T, Q), getPos(Q, T, Z), var(Z).
+
+
+vecino2(pos(F, C), T, pos(FE, _), pos(X, C)) :- X is F - 1, posValida(pos(X, C), T), FE < F.
+vecino2(pos(F, C), T, pos(FE, _), pos(X, C)) :- X is F + 1, posValida(pos(X, C), T), FE > F.
+vecino2(pos(F, C), T, pos(_, CE), pos(F, Y)) :- Y is C - 1, posValida(pos(F, Y), T), CE < C.
+vecino2(pos(F, C), T, pos(_, CE), pos(F, Y)) :- Y is C + 1, posValida(pos(F, Y), T), CE > C.
+vecino2(pos(F, C), T, pos(_, CE), pos(F, Y)) :- Y is C - 1, posValida(pos(F, Y), T), CE = C.
+vecino2(pos(F, C), T, pos(_, CE), pos(F, Y)) :- Y is C + 1, posValida(pos(F, Y), T), CE = C.
+vecino2(pos(F, C), T, pos(FE, _), pos(X, C)) :- X is F - 1, posValida(pos(X, C), T), FE > F.
+vecino2(pos(F, C), T, pos(FE, _), pos(X, C)) :- X is F + 1, posValida(pos(X, C), T), FE < F.
+vecino2(pos(F, C), T, pos(FE, _), pos(X, C)) :- X is F - 1, posValida(pos(X, C), T), FE = F.
+vecino2(pos(F, C), T, pos(FE, _), pos(X, C)) :- X is F + 1, posValida(pos(X, C), T), FE = F.
+vecino2(pos(F, C), T, pos(_, CE), pos(F, Y)) :- Y is C - 1, posValida(pos(F, Y), T), CE > C.
+vecino2(pos(F, C), T, pos(_, CE), pos(F, Y)) :- Y is C + 1, posValida(pos(F, Y), T), CE < C.
+
+vecinoLibre2(P,T,F,Q) :- vecino2(P, T, F, Q), getPos(Q, T, Z), var(Z).
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%
@@ -111,7 +127,14 @@ cantidadDeCaminos(I,F,T,N) :-
 %% Una solución es mejor mientras menos pasos se deba dar para llegar a
 %% destino (distancia Manhattan). Por lo tanto, el predicado deberá devolver de a uno,
 %% todos los caminos pero en orden creciente de longitud.
-camino2(_,_,_,_).
+camino2(I,F,T,P) :- camino2(I, F, T, P, [I]).
+
+
+camino2(F,F,_T, [F], _Used).
+camino2(I,F,T, [I | Path], Used) :-
+  vecinoLibre2(I, T, F, Vecino),
+  nonmember(Vecino, Used),
+  camino2(Vecino, F, T, Path, [Vecino | Used]).
 
 %% Ejercicio 8
 %% camino3(+Inicio, +Fin, +Tablero, -Camino) ídem camino2/4 pero se espera que
